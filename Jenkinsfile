@@ -31,7 +31,15 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+                    sh 'mvn clean verify sonar:sonar -DskipTests'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -65,6 +73,7 @@ pipeline {
         stage('Deploy to AKS') {
             steps {
                 sh """
+                kubectl apply -f k8s/
                 kubectl set image deployment/task-app task-app=${ACR_LOGIN}/${IMAGE_NAME}:${TAG} -n ${AKS_NAMESPACE}
                 kubectl rollout status deployment/task-app -n ${AKS_NAMESPACE}
                 """
@@ -82,7 +91,7 @@ pipeline {
             echo "Build Failed → Rolling Back"
 
             sh """
-            kubectl rollout undo deployment/task-app -n default
+            kubectl rollout undo deployment/task-app -n ${AKS_NAMESPACE}
             """
         }
     }
