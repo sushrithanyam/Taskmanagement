@@ -91,7 +91,11 @@ pipeline {
             echo "Build Failed → Rolling Back"
 
             sh """
-            kubectl rollout undo deployment/task-app -n ${AKS_NAMESPACE}
+            if command -v kubectl; then
+                kubectl rollout undo deployment/task-app -n default || true
+            else
+                echo "kubectl not installed"
+            fi
             """
         }
     }
