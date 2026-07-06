@@ -15,14 +15,14 @@ function App() {
   }, []);
 
   const loadTasks = () => {
-    axios.get("http://localhost:8080/tasks")
+    axios.get("http://172.214.115.239/tasks")
       .then(res => setTasks(res.data))
       .catch(err => console.log(err));
   };
 
   // Add Task
   const addTask = () => {
-    axios.post("http://localhost:8080/tasks", {
+    axios.post("http://172.214.115.239/tasks", {
       id: Math.floor(Math.random() * 10000),
       title,
       priority,
@@ -36,7 +36,7 @@ function App() {
 
   // Delete Task
   const deleteTask = (id) => {
-    axios.delete(`http://localhost:8080/tasks/${id}`)
+    axios.delete(`http://172.214.115.239/tasks/${id}`)
       .then(() => loadTasks());
   };
 

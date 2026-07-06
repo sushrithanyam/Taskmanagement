@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: task-ui
+  template:
+    metadata:
+      labels:
+        app: task-ui
+    spec:
+      containers:
+        - name: task-ui
+          image: taskmanagemntacr.azurecr.io/task-ui:v1
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-ui-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: task-ui
+  ports:
+    - port: 80
+      targetPort: 80
