@@ -58,6 +58,7 @@ Prometheus Monitoring
     ↓
 Grafana Dashboard
 ```
+<img width="900" height="1350" alt="image" src="https://github.com/user-attachments/assets/8fb62387-1507-4cd8-917a-4176e0024d21" />
 
 ---
 
